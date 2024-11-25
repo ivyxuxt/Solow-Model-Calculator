@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solow Model Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 300px;
+            max-width: 100%;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Solow Model Calculator</h1>
+    <form id="solowForm">
+        <label for="avg_s">Average Savings Rate (0-1):</label>
+        <input type="number" id="avg_s" step="0.01" required>
+
+        <label for="avg_pop_gr">Average Population Growth Rate (0-1):</label>
+        <input type="number" id="avg_pop_gr" step="0.01" required>
+
+        <label for="pro_gr">Productivity Growth Rate (0-1):</label>
+        <input type="number" id="pro_gr" step="0.01" required>
+
+        <label for="depreciation_rate">Depreciation Rate (0-1):</label>
+        <input type="number" id="depreciation_rate" step="0.01" required>
+
+        <label for="k_share">Capital Share of Income (0-1):</label>
+        <input type="number" id="k_share" step="0.01" required>
+
+        <button type="button" onclick="calculateSolow()">Calculate</button>
+    </form>
+
+    <div id="results" class="results" style="display: none;">
+        <h2>Results</h2>
+        <p><strong>Steady-State Capital per Effective Labor (k̂):</strong> <span id="k_hat"></span></p>
+        <p><strong>Steady-State Output per Effective Labor (ŷ):</strong> <span id="y_hat"></span></p>
+    </div>
+
+    <script>
+        function calculateSolow() {
+            // Get input values
+            const avg_s = parseFloat(document.getElementById("avg_s").value);
+            const avg_pop_gr = parseFloat(document.getElementById("avg_pop_gr").value);
+            const pro_gr = parseFloat(document.getElementById("pro_gr").value);
+            const depreciation_rate = parseFloat(document.getElementById("depreciation_rate").value);
+            const k_share = parseFloat(document.getElementById("k_share").value);
+
+            // Validate inputs
+            if (isNaN(avg_s) || isNaN(avg_pop_gr) || isNaN(pro_gr) || isNaN(depreciation_rate) || isNaN(k_share)) {
+                alert("Please fill in all fields with valid numbers.");
+                return;
+            }
+
+            // Solow model calculations
+            const k_hat = Math.pow(avg_s / (avg_pop_gr + pro_gr + depreciation_rate), 1 / (1 - k_share));
+            const y_hat = Math.pow(avg_s / (avg_pop_gr + pro_gr + depreciation_rate), k_share / (1 - k_share));
+
+            // Display results
+            document.getElementById("k_hat").textContent = k_hat.toFixed(6);
+            document.getElementById("y_hat").textContent = y_hat.toFixed(6);
+            document.getElementById("results").style.display = "block";
+        }
+    </script>
+</body>
+</html>
